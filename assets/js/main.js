@@ -6,9 +6,36 @@
 * License: https://bootstrapmade.com/license/
 */
 
-(function() {
+(function () {
   "use strict";
-  
+
+  /**
+   * Tooltop
+   */
+  document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    .forEach(el => new bootstrap.Tooltip(el));
+
+  /**
+  * Click-to-copy for the mail icon
+  */
+  const copyMail = document.getElementById('copy-mail');
+  if (copyMail) {
+    copyMail.addEventListener('click', async (e) => {
+      e.preventDefault();
+      await navigator.clipboard.writeText('renate.zhang@outlook.com');
+
+      // Swap tooltip text to "copied!" temporarily
+      const tip = bootstrap.Tooltip.getInstance(copyMail);
+      copyMail.setAttribute('data-bs-title', 'copied!');
+      tip.setContent({ '.tooltip-inner': 'copied!' });
+
+      setTimeout(() => {
+        copyMail.setAttribute('data-bs-title', 'renate.zhang@outlook.com - click to copy');
+        tip.setContent({ '.tooltip-inner': 'renate.zhang@outlook.com - click to copy' });
+      }, 1500);
+    });
+  }
+
   /**
    * Load shared footer
    */
@@ -69,7 +96,7 @@
    * Toggle mobile nav dropdowns
    */
   document.querySelectorAll('.navmenu .toggle-dropdown').forEach(navmenu => {
-    navmenu.addEventListener('click', function(e) {
+    navmenu.addEventListener('click', function (e) {
       e.preventDefault();
       this.parentNode.classList.toggle('active');
       this.parentNode.nextElementSibling.classList.toggle('dropdown-active');
@@ -125,7 +152,7 @@
    * Init swiper sliders
    */
   function initSwiper() {
-    document.querySelectorAll(".init-swiper").forEach(function(swiperElement) {
+    document.querySelectorAll(".init-swiper").forEach(function (swiperElement) {
       let config = JSON.parse(
         swiperElement.querySelector(".swiper-config").innerHTML.trim()
       );
@@ -151,7 +178,7 @@
   function initSwiperTabs() {
     document
       .querySelectorAll(".init-swiper-tabs")
-      .forEach(function(swiperElement) {
+      .forEach(function (swiperElement) {
         let config = JSON.parse(
           swiperElement.querySelector(".swiper-config").innerHTML.trim()
         );
@@ -168,12 +195,12 @@
 
         const swiperInstance = new Swiper(swiperElement, config);
 
-        swiperInstance.on("slideChange", function() {
+        swiperInstance.on("slideChange", function () {
           updateSwiperTabsPagination(swiperInstance, customDots);
         });
 
         customDots.forEach((dot, index) => {
-          dot.addEventListener("click", function(e) {
+          dot.addEventListener("click", function (e) {
             e.preventDefault();
             swiperInstance.slideToLoop(index);
             updateSwiperTabsPagination(swiperInstance, customDots);
@@ -207,13 +234,13 @@
   /**
    * Init isotope layout and filters
    */
-  document.querySelectorAll('.isotope-layout').forEach(function(isotopeItem) {
+  document.querySelectorAll('.isotope-layout').forEach(function (isotopeItem) {
     let layout = isotopeItem.getAttribute('data-layout') ?? 'masonry';
     let filter = isotopeItem.getAttribute('data-default-filter') ?? '*';
     let sort = isotopeItem.getAttribute('data-sort') ?? 'original-order';
 
     let initIsotope;
-    imagesLoaded(isotopeItem.querySelector('.isotope-container'), function() {
+    imagesLoaded(isotopeItem.querySelector('.isotope-container'), function () {
       initIsotope = new Isotope(isotopeItem.querySelector('.isotope-container'), {
         itemSelector: '.isotope-item',
         layoutMode: layout,
@@ -222,8 +249,8 @@
       });
     });
 
-    isotopeItem.querySelectorAll('.isotope-filters li').forEach(function(filters) {
-      filters.addEventListener('click', function() {
+    isotopeItem.querySelectorAll('.isotope-filters li').forEach(function (filters) {
+      filters.addEventListener('click', function () {
         isotopeItem.querySelector('.isotope-filters .filter-active').classList.remove('filter-active');
         this.classList.add('filter-active');
         initIsotope.arrange({
